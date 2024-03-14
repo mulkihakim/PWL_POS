@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\ProductsController;
@@ -22,12 +23,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/level', [LevelController::class, 'index']);
-Route::get('/', [HomeController::class, 'index']);
-Route::get('/user/{id}/{name}', [UserController::class, 'profile']);
-Route::prefix('category')->group(function() {
-    Route::get('/food-beverage', [ProductsController::class, 'foodBeverage']);
-    Route::get('/beauty-health', [ProductsController::class, 'beautyHealth']);
-    Route::get('/home-care', [ProductsController::class, 'homeCare']);
-    Route::get('/baby-kid', [ProductsController::class, 'babyKid']);
-});
-Route::get('/penjualan', [PenjualanController::class, 'transaction']);
+Route::get('/kategori', [KategoriController::class, 'index']);
+
+// js2
+// Route::get('/', [HomeController::class, 'index']);
+// Route::get('/user/{id}/{name}', [UserController::class, 'profile']);
+// Route::prefix('category')->group(function() {
+//     Route::get('/food-beverage', [ProductsController::class, 'foodBeverage']);
+//     Route::get('/beauty-health', [ProductsController::class, 'beautyHealth']);
+//     Route::get('/home-care', [ProductsController::class, 'homeCare']);
+//     Route::get('/baby-kid', [ProductsController::class, 'babyKid']);
+// });
+// Route::get('/penjualan', [PenjualanController::class, 'transaction']);
