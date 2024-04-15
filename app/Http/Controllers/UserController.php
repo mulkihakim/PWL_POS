@@ -31,7 +31,10 @@ class UserController extends Controller
 
         // Not Found Exceptions
         // $user = UserModel::findOrFail(1);
-        $user = UserModel::where('username', 'manager9')->firstOrFail();
+        // $user = UserModel::where('username', 'manager9')->firstOrFail();
+
+        // Retrieving Aggregrates
+        $user = UserModel::where('level_id', 2)->count();
         return view('user', ['data' => $user]);
         
         // UserModel::insert($data); // tambahkan data ke tabel m_user
