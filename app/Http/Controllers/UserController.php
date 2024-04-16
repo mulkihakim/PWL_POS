@@ -101,7 +101,7 @@ class UserController extends Controller
         // dd($user->wasChanged(['nama', 'username'])); //true
         // ---------------------------------------------------------------------
         // CREATE, READ, UPDATE, DELETE (CRUD)
-        $user = UserModel::all();
+        $user = UserModel::with('level')->get();
         return view('user', ['data' => $user]);
     }
     public function tambah() {
