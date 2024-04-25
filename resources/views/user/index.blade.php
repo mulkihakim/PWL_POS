@@ -1,48 +1,97 @@
-@extends('layouts.app')
+@extends('layouts.template')
 
 @section('content')
-    <div class="row mt-5 mb-5">
-        <div class="col-lg-12 margin-tb">
-            <div class="float-left">
-                <h2>CRUD user</h2>
+    <div class="card card-outline card-primary">
+        <div class="card-header">
+            <h3 class="card-title">{{ $page->title }}</h3>
+            <div class="card-tools">
+                <a class="btn btn-sm btn-primary mt-1" href="{{ url('user/create') }}">Tambah</a>
             </div>
-            <div class="float-right">
-                <a class="btn btn-success" href="{{ route('user.create') }}">Input User</a>
+        </div>
+        <div class="card-body">
+            @if (session('success'))
+                <div class="alert alert-succes">{{ session('success') }} </div>
+            @endif
+            @if (session('error'))
+                <div class="alert alert-danger">{{ session('error') }}</div>
+            @endif
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group row">
+                        <label class="col-1 control-label col-form-label">Filter:</label>
+                        <div class="col-3">
+                            <select name="level_id" id="level_id" class="form-control" required>
+                                <option value="">- Semua -</option>
+                                @foreach ($level as $item )
+                                    <option value="{{ $item->level_id }}">{{$item->level_nama}} </option>
+                                @endforeach
+                            </select>
+                            <small class="form-text text-muted">Level Pengguna</small>
+                        </div>
+                    </div>
+                </div>
             </div>
+            <table class="table table-bordered table-striped table-hover table-sm" id="table_user">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Nama</th>
+                        <th>Level Pengguna</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+            </table>
         </div>
     </div>
-
-    @if ($message = Session::get('success'))
-        <div class="alert alert-success">
-            <p>{{ $message }}</p>
-        </div>
-    @endif
-
-    <table class="table table-bordered">
-        <tr>
-            <th width="20px" class="text-center">User id</th>
-            <th width="150px" class="text-center">Level id</th>
-            <th width="200px" class="text-center">Username</th>
-            <th width="200px" class="text-center">Nama</th>
-            <th width="150px" class="text-center">Password</th>
-        </tr>
-        @foreach ($user as $u)
-            <tr>
-                <td>{{ $u->user_id }}</td>
-                <td>{{ $u->level_id }}</td>
-                <td>{{ $u->username }}</td>
-                <td>{{ $u->nama }}</td>
-                <td>{{ substr($u->password, 0, 10) . "..." }}</td>
-                <td class="text-center">
-                    <form action="{{ route('user.destroy', $u->user_id) }}" method="POST">
-                        <a class="btn btn-info btn-sm" href="{{ route('user.show', $u->user_id) }}">Show</a>
-                        <a class="btn btn-primary btn-sm" href="{{ route('user.edit', $u->user_id) }}">Edit</a>
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">Delete</button>
-                    </form>
-                </td>
-            </tr>
-        @endforeach
-    </table>
 @endsection
+
+@push('css')
+@endpush
+
+@push('js')
+    <script>
+        $(document).ready(function() {
+            var dataUser = $('#table_user').DataTable({
+                serverSide: true, // serverSide: true, jika ingin menggunakan server side processing
+                ajax: {
+                    "url": "{{ url('user/list') }}",
+                    "dataType": "json",
+                    "type": "POST",
+                    "data" : function(d){
+                        d.level_id = $('#level_id').val();
+                    }
+                },
+                columns: [{
+                    data: "DT_RowIndex", // nomor urut dari laravel datatable addIndexColumn()
+                    className: "text-center",
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: "username",
+                    className: "",
+                    orderable: true, // orderable: true, jika ingin kolom ini bisa diurutkan
+                    searchable: true // searchable: true, jika ingin kolom ini bisa dicari
+                }, {
+                    data: "nama",
+                    className: "",
+                    orderable: true, // orderable: true, jika ingin kolom ini bisa diurutkan
+                    searchable: true // searchable: true, jika ingin kolom ini bisa dicari
+                }, {
+                    data: "level.level_nama",
+                    className: "",
+                    orderable: false, // orderable: true, jika ingin kolom ini bisa diurutkan
+                    searchable: false // searchable: true, jika ingin kolom ini bisa dicari
+                }, {
+                    data: "aksi",
+                    className: "",
+                    orderable: false, // orderable: true, jika ingin kolom ini bisa diurutkan
+                    searchable: false // searchable: true, jika ingin kolom ini bisa dicari
+                }]
+            });
+            $('#level_id').on('change', function(){
+                dataUser.ajax.reload();
+            });
+        });
+    </script>
+@endpush
