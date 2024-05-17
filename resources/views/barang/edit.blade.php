@@ -21,7 +21,7 @@
             <div class="col-11">
               <select class="form-control" id="kategori_id" name="kategori_id" required>
                 <option value="">- Pilih Kategori -</option>
-                @foreach($categories as $category)
+                @foreach($kategori as $category)
                   <option value="{{ $category->kategori_id }}" @if($category->kategori_id == $barang->kategori_id) selected @endif>{{ $category->kategori_nama }}</option>
                 @endforeach
               </select>

@@ -6,40 +6,67 @@
       <div class="card-tools"></div>
     </div>
     <div class="card-body">
-      @empty($barang)
-        <div class="alert alert-danger alert-dismissible">
-          <h5><i class="icon fas fa-ban"></i> Kesalahan!</h5>
-          Data yang Anda cari tidak ditemukan.
+      <form method="POST" action="{{ url('stok') }}" class="form-horizontal">
+        @csrf
+        <div class="form-group row">
+          <label class="col-1 control-label col-form-label">Barang</label>
+          <div class="col-11">
+            <select class="form-control" id="barang_id" name="barang_id" required>
+              <option value="">- Pilih Barang -</option>
+              @foreach($products as $product)
+                <option value="{{ $product->barang_id }}" @if (old('barang_id') === $product->barang_id) selected=true @endif >{{ $product->barang_nama }}</option>
+              @endforeach
+            </select>
+            @error('barang_id')
+            <small class="form-text text-danger">{{ $message }}</small>
+            @enderror
+          </div>
         </div>
-      @else
-        <table class="table table-bordered table-striped table-hover table-sm">
-          <tr>
-            <th>ID</th>
-            <td>{{ $barang->barang_id }}</td>
-          </tr>
-          <tr>
-            <th>Kode Barang</th>
-            <td>{{ $barang->barang_kode }}</td>
-          </tr>
-          <tr>
-            <th>Nama Barang</th>
-            <td>{{ $barang->barang_nama }}</td>
-          </tr>
-          <tr>
-            <th>Harga Beli</th>
-            <td>{{ $barang->harga_beli }}</td>
-          </tr>
-          <tr>
-            <th>Harga Jual</th>
-            <td>{{ $barang->harga_jual }}</td>
-          </tr>
-        </table>
-      @endempty
-      <a href="{{ url('barang') }}" class="btn btn-sm btn-default mt-2">Kembali</a>
+        <div class="form-group row">
+          <label class="col-1 control-label col-form-label">User</label>
+          <div class="col-11">
+            <select class="form-control" id="user_id" name="user_id" required>
+              <option value="">- Pilih User -</option>
+              @foreach($users as $user)
+                <option value="{{ $user->user_id }}" @if (old('user_id') === $user->user_id) selected=true @endif >{{ $user->nama }}</option>
+              @endforeach
+            </select>
+            @error('user_id')
+            <small class="form-text text-danger">{{ $message }}</small>
+            @enderror
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-1 control-label col-form-label">Tanggal</label>
+          <div class="col-11">
+            <input type="datetime-local" class="form-control" id="stok_tanggal" name="stok_tanggal" value="{{ old('stok_tanggal') }}" required>
+            @error('stok_tanggal')
+            <small class="form-text text-danger">{{ $message }}</small>
+            @enderror
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-1 control-label col-form-label">Jumlah Stok</label>
+          <div class="col-11">
+            <input type="number" class="form-control" id="stok_jumlah" name="stok_jumlah" value="{{ old('stok_jumlah') }}" required>
+            @error('stok_jumlah')
+            <small class="form-text text-danger">{{ $message }}</small>
+            @enderror
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-11">
+            <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
+            <a class="btn btn-sm btn-default ml-1" href="{{ url('stok') }}">Kembali</a>
+          </div>
+        </div>
+      </form>
     </div>
   </div>
 @endsection
+
 @push('css')
 @endpush
+
 @push('js')
 @endpush
