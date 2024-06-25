@@ -23,6 +23,14 @@ class UserModel extends Authenticatable
     protected $hidden = [
         'password',
     ];
+    public function getJWTIdentifier(): string
+    {
+        return $this->getKey();
+    }
+    public function getJWTCustomClaims(): array
+    {
+        return [];
+    }
     public function level(): BelongsTo{
         return $this->belongsTo(LevelModel::class, 'level_id', 'level_id');
     }
