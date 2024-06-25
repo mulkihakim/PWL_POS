@@ -2,19 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class UserModel extends Model
+class UserModel extends Authenticatable
 {
     use HasFactory;
 
     protected $table = 'm_user';        //Mendefinisikan nama tabel yang digunakan oleh model ini
-    public $timestamps = false;
     protected $primaryKey = 'user_id';  //Mendefinisikan primary key dari tabel yang digunakan
-
     protected $fillable = [
         'level_id',
         'username',
@@ -31,7 +30,6 @@ class UserModel extends Model
     {
         return $this->hasMany(StokModel::class, 'user_id', 'user_id');
     }
-
     public function penjualan(): HasMany
     {
         return $this->hasMany(PenjualanModel::class, 'user_id', 'user_id');
