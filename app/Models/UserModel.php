@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -19,8 +20,15 @@ class UserModel extends Authenticatable implements JWTSubject
         'level_id',
         'username',
         'nama',
-        'password'
+        'password', 
+        'image'//tambahan
     ];
+    protected function image():Attribute
+    {
+        return Attribute::make(
+            get: fn($image) => url('/storage/post/' . $image),
+        );
+    }
     protected $hidden = [
         'password',
     ];
